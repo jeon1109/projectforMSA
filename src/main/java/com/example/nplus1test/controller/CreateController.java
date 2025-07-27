@@ -1,6 +1,6 @@
 package com.example.nplus1test.controller;
 
-import com.example.nplus1test.domain.country.service.CountryService;
+import com.example.nplus1test.domain.country.service.MenuService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class CreateController {
 
-    private final CountryService countryService;
+    private final MenuService menuService;
 
-    public CreateController(CountryService countryService) {
-        this.countryService = countryService;
+    public CreateController(MenuService menuService) {
+        this.menuService = menuService;
     }
 
     @GetMapping("/country")
@@ -20,18 +20,18 @@ public class CreateController {
         return "country";
     }
 
-    @GetMapping("/create/country")
-    public String countryProcess(@RequestParam String country) {
+    @GetMapping("/create/menu")
+    public String MenuProcess(@RequestParam String menu) {
 
-        countryService.createCountry(country);
+        menuService.createMenu(menu);
 
         return "redirect:/country";
     }
 
-    @GetMapping("/create/city")
-    public String cityProcess(@RequestParam String country, @RequestParam String city) {
+    @GetMapping("/create/ingredient")
+    public String cityProcess(@RequestParam String menu, @RequestParam String ingredient) {
 
-        countryService.createCity(country, city);
+        menuService.createIngredient(menu, ingredient);
 
         return "redirect:/country";
     }
