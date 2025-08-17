@@ -46,12 +46,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 }
 
                 Long userId = Long.valueOf(c.getSubject());
-                String username = c.get("username", String.class);
+                String email = c.get("email", String.class);
                 List<String> roles = c.get("roles", List.class);
                 Set<SimpleGrantedAuthority> auths = roles == null ? Set.of() :
                         roles.stream().map(r -> new SimpleGrantedAuthority("ROLE_" + r)).collect(Collectors.toSet());
 
-                var authentication = new UsernamePasswordAuthenticationToken(username, null, auths);
+                var authentication = new UsernamePasswordAuthenticationToken(email, null, auths);
                 authentication.setDetails(userId);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } catch (Exception e) {

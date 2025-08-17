@@ -47,8 +47,7 @@
 <body class="min-h-screen flex items-center justify-center px-4">
 <main class="w-full max-w-[480px]">
     <header class="text-center mb-8 select-none">
-        <h1 class="text-4xl font-semibold tracking-tight">World Registry</h1>
-        <p class="text-sm text-slate-400 mt-2">국가와 도시를 간단히 추가할 수 있는 미니 폼 스타일을 그대로 살린 로그인</p>
+        <h1 class="text-4xl font-semibold tracking-tight">결제 게시판 LOGIN</h1>
     </header>
 
     <section class="card rounded-2xl p-6 md:p-8">
@@ -78,8 +77,7 @@
             <!-- Remember + Forgot -->
             <div class="flex items-center justify-between gap-4">
                 <label class="inline-flex items-center gap-2 text-sm text-slate-400 select-none">
-                    <input type="checkbox" class="rounded border-slate-600 bg-transparent focus:ring-0" name="remember" />
-                    로그인 상태 유지
+
                 </label>
                 <a href="#" class="text-sm text-indigo-300 hover:text-indigo-200">비밀번호 찾기</a>
             </div>
@@ -112,6 +110,7 @@
     // 비밀번호 표시/숨기기
     const toggle = document.getElementById('togglePw');
     const pw = document.getElementById('password');
+
     toggle.addEventListener('click', () => {
         const show = pw.type === 'password';
         pw.type = show ? 'text' : 'password';
@@ -120,14 +119,43 @@
     });
 
     // 데모 전송 핸들러
-    document.getElementById('loginForm').addEventListener('submit', (e) => {
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
         e.preventDefault();
+
         const formData = new FormData(e.target);
         const payload = Object.fromEntries(formData.entries());
-        console.log('로그인 요청', payload);
-        // TODO: 실제 API 연동: fetch('/auth/login', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) })
-        // 성공 시 이동: window.location.href = '/dashboard'
-        alert('데모: 콘솔에 payload가 출력되었습니다.');
+
+        try {
+            const res = await fetch('/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!res.ok) {
+                // 서버가 200이 아닌 경우
+                const errText = await res.text();
+                alert(`로그인 실패: ${errText}`);
+                return;
+            }
+
+            // 서버에서 JWT 토큰을 응답한다고 가정
+            const data = await res.json();
+            console.log('로그인 성공', data);
+
+            // 예: 토큰을 localStorage에 저장
+            if (data.token) {
+                localStorage.setItem('jwt', data.token);
+            }
+
+            // 로그인 후 이동
+            window.location.href = '/dashboard';
+        } catch (err) {
+            console.error('로그인 요청 중 오류', err);
+            alert('로그인 중 오류가 발생했습니다.');
+        }
     });
 </script>
 </body>

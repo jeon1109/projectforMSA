@@ -3,14 +3,14 @@ package com.example.nplus1test.domain.country.entity;
 import jakarta.persistence.*;
 import java.util.Set;
 @Entity
-@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "username"))
+@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "eamil"))
 public class UserEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, length = 50)
-    private String username;
+    private String email;
 
     @Column(nullable = false)
     private String password; // BCrypt 해시
@@ -22,14 +22,14 @@ public class UserEntity {
 
     protected UserEntity() {}
 
-    public UserEntity(String username, String password, Set<String> roles) {
-        this.username = username;
+    public UserEntity(String email, String password, Set<String> roles) {
+        this.email = email;
         this.password = password;
         this.roles = roles;
     }
 
     public Long getId() { return id; }
-    public String getUsername() { return username; }
+    public String getEmail() { return email; }
     public String getPassword() { return password; }
     public Set<String> getRoles() { return roles; }
 
