@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root{
+            --bg:#0a0f1f;            /* deep navy */
+            --bg2:#0c142b;           /* card base */
+            --muted:#9aa4b2;         /* slate-400 */
+            --text:#e7e8ea;          /* gray-200 */
+            --primary:#2563ff;       /* brand */
+            --primary-2:#1b4ee1;     /* brand-2 */
+            --ring:rgba(37,99,255,.35);
+            --border:rgba(255,255,255,.06);
+            --glow: 0 0 0 1px rgba(255,255,255,.04), 0 10px 30px rgba(0,0,0,.45), 0 0 40px rgba(37,99,255,.08);
+            --inset: inset 0 1px 0 rgba(255,255,255,.05), inset 0 0 0 1px rgba(255,255,255,.04), 0 10px 25px rgba(0,0,0,.45);
+        }
+        html,body{height:100%}
+        body{background: radial-gradient(1200px 600px at 20% -10%, #1a2a6c40, transparent),
+        radial-gradient(1000px 600px at 110% 10%, #0f9b8e25, transparent),
+        radial-gradient(900px 500px at 50% 110%, #2563ff20, transparent),
+        linear-gradient(160deg, #0a0f1f 0%, #0a0f1f 20%, #0b1224 80%);
+            color:var(--text);
+        }
+        .card{background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+            border:1px solid var(--border);
+            box-shadow:var(--glow);
+            backdrop-filter: blur(12px);
+        }
+        .input{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+            border:1px solid var(--border);
+            color:var(--text);
+            outline:none;
+            box-shadow: var(--inset);
+        }
+        .input:focus{border-color:transparent; box-shadow: 0 0 0 8px var(--ring), var(--inset);}
+        .btn{background:linear-gradient(180deg, var(--primary), var(--primary-2));
+            color:#eaf0ff; box-shadow:0 8px 24px rgba(37,99,255,.35);
+        }
+        .btn:hover{filter:brightness(1.05)}
+        .btn:active{transform:translateY(1px)}
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center px-4">
+<main class="w-full max-w-[480px]">
+    <header class="text-center mb-8 select-none">
+        <h1 class="text-4xl font-semibold tracking-tight">World Registry</h1>
+        <p class="text-sm text-slate-400 mt-2">국가와 도시를 간단히 추가할 수 있는 미니 폼 스타일을 그대로 살린 로그인</p>
+    </header>
+
+    <section class="card rounded-2xl p-6 md:p-8">
+        <h2 class="text-xl font-semibold mb-6">로그인</h2>
+
+        <form id="loginForm" class="space-y-5">
+            <!-- Email -->
+            <div>
+                <label class="block text-sm text-slate-400 mb-2">이메일</label>
+                <input name="email" type="email" required placeholder="e.g. user@example.com"
+                       class="input w-full rounded-xl px-4 py-3 placeholder-slate-500" />
+            </div>
+
+            <!-- Password with toggle -->
+            <div>
+                <div class="flex items-center justify-between mb-2">
+                    <label class="block text-sm text-slate-400">비밀번호</label>
+                    <button type="button" id="togglePw" class="text-xs text-slate-400 hover:text-slate-200">표시</button>
+                </div>
+                <div class="relative">
+                    <input id="password" name="password" type="password" required placeholder="••••••••"
+                           class="input w-full rounded-xl px-4 py-3 pr-12 placeholder-slate-500" />
+                    <svg class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </div>
+            </div>
+
+            <!-- Remember + Forgot -->
+            <div class="flex items-center justify-between gap-4">
+                <label class="inline-flex items-center gap-2 text-sm text-slate-400 select-none">
+                    <input type="checkbox" class="rounded border-slate-600 bg-transparent focus:ring-0" name="remember" />
+                    로그인 상태 유지
+                </label>
+                <a href="#" class="text-sm text-indigo-300 hover:text-indigo-200">비밀번호 찾기</a>
+            </div>
+
+            <!-- Submit -->
+            <div class="pt-2">
+                <button type="submit" class="btn w-full rounded-xl px-4 py-3 font-semibold">로그인</button>
+            </div>
+
+            <!-- Divider -->
+            <div class="flex items-center gap-3 py-2">
+                <div class="h-px flex-1 bg-white/10"></div>
+                <span class="text-xs text-slate-500">또는</span>
+                <div class="h-px flex-1 bg-white/10"></div>
+            </div>
+
+            <!-- Social (optional) -->
+            <div class="grid grid-cols-2 gap-3">
+                <button type="button" class="input rounded-xl px-4 py-2 text-sm hover:bg-white/5">Google</button>
+                <button type="button" class="input rounded-xl px-4 py-2 text-sm hover:bg-white/5">Kakao</button>
+            </div>
+
+            <!-- Sign up link -->
+            <p class="text-center text-sm text-slate-400 pt-2">계정이 없으신가요? <a href="#" class="text-indigo-300 hover:text-indigo-200">회원가입</a></p>
+        </form>
+    </section>
+</main>
+
+<script>
+    // 비밀번호 표시/숨기기
+    const toggle = document.getElementById('togglePw');
+    const pw = document.getElementById('password');
+    toggle.addEventListener('click', () => {
+        const show = pw.type === 'password';
+        pw.type = show ? 'text' : 'password';
+        toggle.textContent = show ? '숨기기' : '표시';
+        pw.focus();
+    });
+
+    // 데모 전송 핸들러
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const payload = Object.fromEntries(formData.entries());
+        console.log('로그인 요청', payload);
+        // TODO: 실제 API 연동: fetch('/auth/login', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) })
+        // 성공 시 이동: window.location.href = '/dashboard'
+        alert('데모: 콘솔에 payload가 출력되었습니다.');
+    });
+</script>
+</body>
+</html>

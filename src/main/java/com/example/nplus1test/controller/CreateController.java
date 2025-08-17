@@ -20,6 +20,13 @@ public class CreateController {
         return "country";
     }
 
+    @GetMapping("/main")
+    public String loginPage() {
+
+        return "login";
+    }
+
+
     @GetMapping("/create/menu")
     public String MenuProcess(@RequestParam String menu) {
 
