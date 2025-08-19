@@ -3,6 +3,7 @@ package com.example.nplus1test.token;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class TokenStore {
@@ -12,7 +13,7 @@ public class TokenStore {
 
     // key 규칙 예: refresh:{userId} -> refreshToken
     public void saveRefreshToken(Long userId, String refreshToken, Duration ttl) {
-        redis.opsForValue().set("refresh:" + userId, refreshToken, ttl);
+        redis.opsForValue().set("refresh:" + userId, refreshToken);
     }
 
     public String getRefreshToken(Long userId) {

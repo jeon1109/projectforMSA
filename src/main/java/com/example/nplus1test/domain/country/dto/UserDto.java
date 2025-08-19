@@ -10,9 +10,16 @@ public class UserDto {
     public record LoginRequest(
             @NotBlank String email,
             @NotBlank String password
-    ) {}
+    ) {
 
-    public record TokenResponse(String accessToken, String refreshToken) {}
+    }
 
-    public record RefreshRequest(@NotBlank String refreshToken) {}
+    public record TokenResponse(String accessToken, String refreshToken) {
+
+
+    }
+
+    public record RefreshRequest(@NotBlank String refreshToken) {
+
+    }
 }

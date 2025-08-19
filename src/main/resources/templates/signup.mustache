@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>회원가입</title>
+    <style>
+        :root{
+            --bg:#0f172a; --card:#0b1224; --text:#e5e7eb; --muted:#94a3b8;
+            --primary:#2563eb; --primary-2:#1d4ed8; --ring:rgba(37,99,235,.35); --danger:#ef4444; --ok:#10b981;
+        }
+        *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Apple SD Gothic Neo,Noto Sans KR,sans-serif}
+        .wrap{min-height:100dvh;display:grid;place-items:center;padding:24px}
+        .card{width:min(460px,94vw);background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:24px 20px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+        h1{margin:0 0 4px;font-size:22px} .sub{margin:0 0 16px;color:var(--muted);font-size:14px}
+        label{display:block;font-size:13px;margin:12px 0 6px;color:#cbd5e1}
+        input{width:100%;padding:12px 12px;border:1px solid rgba(255,255,255,.12);background:#0a1122;color:var(--text);border-radius:10px;outline:none}
+        input:focus{border-color:var(--primary);box-shadow:0 0 0 4px var(--ring)}
+        .row{display:flex;gap:10px}
+        .btn{margin-top:14px;width:100%;padding:12px 14px;border:0;border-radius:10px;background:linear-gradient(180deg,var(--primary),var(--primary-2));color:#fff;font-weight:600;cursor:pointer}
+        .btn:disabled{opacity:.6;cursor:not-allowed}
+        .note{margin-top:10px;font-size:12px;color:var(--muted)}
+        .err{margin-top:8px;color:var(--danger);font-size:13px;min-height:18px}
+        .ok{margin-top:8px;color:var(--ok);font-size:13px;min-height:18px}
+        .eye{position:absolute;right:10px;top:50%;transform:translateY(-50%);cursor:pointer;color:#9aa4b2;font-size:12px;}
+        .field{position:relative}
+        .hint{font-size:12px;color:#9aa4b2;margin-top:6px}
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <form class="card" id="signupForm" novalidate>
+        <h1>회원가입</h1>
+        <p class="sub">이메일과 비밀번호를 입력해 주세요.</p>
+
+        <label for="email">이메일</label>
+        <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required />
+
+        <div class="row">
+            <div style="flex:1">
+                <label for="password">비밀번호</label>
+                <div class="field">
+                    <input id="password" name="password" type="password" placeholder="8자 이상" autocomplete="new-password" required />
+                    <span class="eye" data-toggle="#password">보기</span>
+                </div>
+                <div class="hint" id="strengthHint">영문/숫자/기호를 섞으면 더 안전합니다.</div>
+            </div>
+            <div style="flex:1">
+                <label for="confirm">비밀번호 확인</label>
+                <div class="field">
+                    <input id="confirm" name="confirm" type="password" placeholder="다시 입력" autocomplete="new-password" required />
+                    <span class="eye" data-toggle="#confirm">보기</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="err" id="errorBox"></div>
+        <div class="ok" id="okBox"></div>
+
+        <button class="btn" id="submitBtn" type="submit">가입하기</button>
+        <p class="note">가입을 누르면 서비스 약관 및 개인정보 처리방침에 동의한 것으로 간주됩니다.</p>
+    </form>
+</div>
+
+<script>
+    const form = document.getElementById('signupForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const errorBox = document.getElementById('errorBox');
+    const okBox = document.getElementById('okBox');
+    const emailEl = document.getElementById('email');
+    const pwEl = document.getElementById('password');
+    const cfEl = document.getElementById('confirm');
+    const strengthHint = document.getElementById('strengthHint');
+
+    // 비밀번호 가시성 토글
+    document.querySelectorAll('.eye').forEach(el=>{
+        el.addEventListener('click', ()=>{
+            const target = document.querySelector(el.dataset.toggle);
+            target.type = target.type === 'password' ? 'text' : 'password';
+            el.textContent = target.type === 'password' ? '보기' : '숨기기';
+        });
+    });
+
+    // 간단한 비밀번호 강도 힌트
+    function strength(pw){
+        let score = 0;
+        if(pw.length >= 8) score++;
+        if(/[A-Z]/.test(pw)) score++;
+        if(/[0-9]/.test(pw)) score++;
+        if(/[^A-Za-z0-9]/.test(pw)) score++;
+        return score;
+    }
+    pwEl.addEventListener('input', ()=>{
+        const s = strength(pwEl.value);
+        const labels = ['매우 약함','약함','보통','좋음','아주 좋음'];
+        strengthHint.textContent = pwEl.value ? `비밀번호 강도: ${labels[s]}` : '영문/숫자/기호를 섞으면 더 안전합니다.';
+    });
+
+    function validate(){
+        errorBox.textContent = ''; okBox.textContent='';
+        const email = emailEl.value.trim();
+        const pw = pwEl.value;
+        const cf = cfEl.value;
+        const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if(!emailRe.test(email)) return '올바른 이메일 형식이 아닙니다.';
+        if(pw.length < 8) return '비밀번호는 8자 이상이어야 합니다.';
+        if(pw !== cf) return '비밀번호와 확인 값이 일치하지 않습니다.';
+        return null;
+    }
+
+    form.addEventListener('submit', async (e)=>{
+        e.preventDefault();
+        const msg = validate();
+        if(msg){ errorBox.textContent = msg; return; }
+
+        submitBtn.disabled = true; errorBox.textContent=''; okBox.textContent='';
+        try{
+            const payload = {
+                email: emailEl.value.trim(),
+                password: pwEl.value
+            };
+
+            // 필요한 경우 CSRF 토큰을 헤더에 추가하세요 (서버 설정에 따라)
+            const res = await fetch('/auth/signup', {
+                method:'POST',
+                headers:{ 'Content-Type':'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if(res.status === 201 || res.ok){
+                okBox.textContent = '가입이 완료되었습니다. 로그인 페이지로 이동합니다.';
+                // 가입 후 이동 (원하는 경로로 변경)
+                setTimeout(()=> location.href='/login', 800);
+            }else{
+                // 서버가 에러 메시지를 JSON/문자열로 내려줄 수 있음
+                let errText;
+                try { errText = (await res.json()).message || (await res.text()); }
+                catch { errText = await res.text(); }
+                errorBox.textContent = errText || '가입 처리 중 오류가 발생했습니다.';
+            }
+        }catch(err){
+            console.error(err);
+            errorBox.textContent = '네트워크 오류가 발생했습니다.';
+        }finally{
+            submitBtn.disabled = false;
+        }
+    });
+</script>
+</body>
+</html>

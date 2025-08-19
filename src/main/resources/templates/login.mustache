@@ -42,6 +42,28 @@
         }
         .btn:hover{filter:brightness(1.05)}
         .btn:active{transform:translateY(1px)}
+
+        /* 토스트 팝업 스타일 */
+         .toast {
+             position: fixed;
+             top: 20px;
+             right: 20px;
+             background: linear-gradient(135deg, #2563eb, #1d4ed8);
+             color: #fff;
+             padding: 14px 18px;
+             border-radius: 10px;
+             font-size: 14px;
+             font-weight: 500;
+             box-shadow: 0 6px 20px rgba(0,0,0,.25);
+             opacity: 0;
+             transform: translateY(-20px);
+             transition: opacity .3s ease, transform .3s ease;
+             z-index: 1000;
+         }
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center px-4">
@@ -101,12 +123,27 @@
             </div>
 
             <!-- Sign up link -->
-            <p class="text-center text-sm text-slate-400 pt-2">계정이 없으신가요? <a href="#" class="text-indigo-300 hover:text-indigo-200">회원가입</a></p>
+            <p class="text-center text-sm text-slate-400 pt-2">계정이 없으신가요? <a href="/signup" class="text-indigo-300 hover:text-indigo-200">회원가입</a></p>
         </form>
     </section>
 </main>
 
 <script>
+    // 공용 토스트 함수
+    function showToast(message, duration = 2500) {
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        // 애니메이션 시작
+        requestAnimationFrame(() => toast.classList.add('show'));
+        // duration 후 제거
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 300);
+        }, duration);
+    }
+
     // 비밀번호 표시/숨기기
     const toggle = document.getElementById('togglePw');
     const pw = document.getElementById('password');
@@ -137,21 +174,24 @@
             if (!res.ok) {
                 // 서버가 200이 아닌 경우
                 const errText = await res.text();
-                alert(`로그인 실패: ${errText}`);
+               // alert(`로그인 실패: ${errText}`);
+                showToast('로그인 실패! ${errText}');
                 return;
             }
-
-            // 서버에서 JWT 토큰을 응답한다고 가정
-            const data = await res.json();
-            console.log('로그인 성공', data);
-
-            // 예: 토큰을 localStorage에 저장
-            if (data.token) {
-                localStorage.setItem('jwt', data.token);
+            else {
+                // 서버에서 JWT 토큰을 응답한다고 가정
+                const data = await res.json();
+                console.log('로그인 성공', data);
+                // 예: 토큰을 localStorage에 저장
+                if (data.token) {
+                    localStorage.setItem('jwt', data.token);
+                }
+                showToast('로그인 성공! 환영합니다.');
             }
 
+
             // 로그인 후 이동
-            window.location.href = '/dashboard';
+            window.location.href = '/signup';
         } catch (err) {
             console.error('로그인 요청 중 오류', err);
             alert('로그인 중 오류가 발생했습니다.');

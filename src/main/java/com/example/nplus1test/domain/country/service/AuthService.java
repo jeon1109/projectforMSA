@@ -32,9 +32,6 @@ public class AuthService {
     public UserDto.TokenResponse login(UserDto.LoginRequest req) {
         var user = users.findByEmail(req.email()).orElseThrow(()
                 -> new IllegalArgumentException("존재하지 않는 사용자"));
-        
-        // base64로 변경
-       // String realPassword = encoder.encode(user.getPassword());
 
         if (!encoder.matches(req.password(), user.getPassword()))
             throw new IllegalArgumentException("비밀번호 불일치");
@@ -42,7 +39,7 @@ public class AuthService {
         String access = jwt.createAccessToken(user.getId(), user.getEmail(), user.getRoles());
         String refresh = jwt.createRefreshToken(user.getId());
 
-        store.saveRefreshToken(user.getId(), refresh, Duration.ofDays(7));
+       // store.saveRefreshToken(user.getId(), refresh, Duration.ofDays(7));
         return new UserDto.TokenResponse(access, refresh);
     }
 

@@ -26,6 +26,11 @@ public class CreateController {
         return "login";
     }
 
+    @GetMapping("/signup")
+    public String signupPage() {
+
+        return "signup";
+    }
 
     @GetMapping("/create/menu")
     public String MenuProcess(@RequestParam String menu) {
