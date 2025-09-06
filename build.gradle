@@ -1,14 +1,21 @@
 plugins {
+    // 1. 컴파일, 빌드, 테스트 작업을 수행
+    // 2. 그래이들에 자바 지원을 제공
     id 'java'
+    // 그레이들에서 스프링부트의 지원을 제공하고 버전을 설명
     id 'org.springframework.boot' version '3.4.4'
+    // 스프링에 의한 의존성 관리 기능 제공
     id 'io.spring.dependency-management' version '1.1.7'
 }
-
+// 생성한 프로젝트 그룹 아이디
 group = 'com.example'
+// 어플리케이션 버전 - default : '0.0.1-SNAPSHOT'
 version = '0.0.1-SNAPSHOT'
 
 java {
     toolchain {
+        // 자바 언어 버전
+        // sourceComatibility
         languageVersion = JavaLanguageVersion.of(17)
     }
 }
@@ -18,11 +25,12 @@ configurations {
         extendsFrom annotationProcessor
     }
 }
-
+// 의존성 라이브러리를 검색할 아티팩트 저장소
 repositories {
     mavenCentral()
 }
 
+// 어플리케이션에 의해 사용될 의존 라이브러리
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-mustache'
@@ -50,9 +58,11 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.5")
 
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
-
+    // spring-data-r2dbc
+    implementation("org.springframework.data:spring-data-r2dbc:3.5.1")
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
 }
-
+// 테스트시 junit5가 제공하는 junit 플랫폼으로 테스트하도록 설정
 tasks.named('test') {
     useJUnitPlatform()
 }
