@@ -1,6 +1,6 @@
-package com.example.nplus1test.consumer;
+package com.example.nplus1test.domain.rabbitMQ.consumer;
 
-import com.example.nplus1test.dto.User;
+import com.example.nplus1test.domain.userLogin.dto.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;

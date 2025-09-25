@@ -1,4 +1,4 @@
-package com.example.nplus1test.publisher;
+package com.example.nplus1test.domain.rabbitMQ.publisher;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

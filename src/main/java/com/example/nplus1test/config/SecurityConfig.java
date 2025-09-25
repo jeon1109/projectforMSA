@@ -1,6 +1,6 @@
 package com.example.nplus1test.config;
 
-import com.example.nplus1test.security.JwtAuthFilter;
+import com.example.nplus1test.domain.userLogin.security.JwtAuthFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,7 +29,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/signup/**", "/country", "/main/**", "/pay/**","/payView/test/", "/api/v1/").permitAll()
+                        .requestMatchers("/auth/**", "/signup/**", "/country", "/main/**", "/pay/**","/payView/test/", "/api/v1/", "/api/users/**", "/sse", "messages").permitAll()
                         .anyRequest().authenticated()
                 )
                 .headers(h -> h.frameOptions(frame -> frame.disable())); // H2 콘솔용
@@ -39,7 +39,9 @@ public class SecurityConfig {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() { return new BCryptPasswordEncoder(); }
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {

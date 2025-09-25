@@ -1,6 +1,6 @@
-package com.example.nplus1test.publisher;
+package com.example.nplus1test.domain.rabbitMQ.publisher;
 
-import com.example.nplus1test.dto.User;
+import com.example.nplus1test.domain.userLogin.dto.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -25,6 +25,7 @@ public class RabbitMQJsonProducer {
 
     public void sendjsonMessage(User user) {
         LOGGER.info(String.format("Json message send -> %s", user.toString()));
+        // 익스체인저와 라우팅 키를 보낸다
         rabbitTemplate.convertAndSend(exchange, routingJsonKey, user);
     }
 

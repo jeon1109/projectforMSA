@@ -43,7 +43,6 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
     // Lombok (선택)
@@ -61,6 +60,12 @@ dependencies {
     // spring-data-r2dbc
     implementation("org.springframework.data:spring-data-r2dbc:3.5.1")
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis' // 선택(OTP 저장용)
+    implementation "org.springframework.boot:spring-boot-starter-mail"
+    // https://mvnrepository.com/artifact/org.springframework.security.oauth/spring-security-oauth2
+    implementation("org.springframework.security.oauth:spring-security-oauth2:2.5.2.RELEASE")
+
 }
 // 테스트시 junit5가 제공하는 junit 플랫폼으로 테스트하도록 설정
 tasks.named('test') {

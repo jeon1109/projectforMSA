@@ -1,4 +1,4 @@
-package com.example.nplus1test.dto;
+package com.example.nplus1test.domain.userLogin.dto;
 
 import lombok.Data;
 

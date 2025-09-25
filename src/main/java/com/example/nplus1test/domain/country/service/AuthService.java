@@ -1,7 +1,7 @@
 package com.example.nplus1test.domain.country.service;
 
 import com.example.nplus1test.domain.country.dto.*;
-import com.example.nplus1test.security.JwtProvider;
+import com.example.nplus1test.domain.userLogin.security.JwtProvider;
 import com.example.nplus1test.token.TokenStore;
 import com.example.nplus1test.domain.country.entity.UserEntity;
 import com.example.nplus1test.domain.country.repository.UserRepository;

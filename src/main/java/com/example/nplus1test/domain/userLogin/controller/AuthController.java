@@ -1,4 +1,4 @@
-package com.example.nplus1test.controller;
+package com.example.nplus1test.domain.userLogin.controller;
 
 import com.example.nplus1test.domain.country.dto.*;
 import com.example.nplus1test.domain.country.service.AuthService;

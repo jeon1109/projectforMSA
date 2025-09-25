@@ -97,7 +97,9 @@
     });
 
     function validate(){
-        errorBox.textContent = ''; okBox.textContent='';
+        errorBox.textContent = '';
+        okBox.textContent='';
+
         const email = emailEl.value.trim();
         const pw = pwEl.value;
         const cf = cfEl.value;
@@ -108,6 +110,7 @@
         if(pw !== cf) return '비밀번호와 확인 값이 일치하지 않습니다.';
         return null;
     }
+
 
     form.addEventListener('submit', async (e)=>{
         e.preventDefault();
@@ -146,6 +149,8 @@
             submitBtn.disabled = false;
         }
     });
+
+
 </script>
 </body>
 </html>

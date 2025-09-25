@@ -1,4 +1,4 @@
-package com.example.nplus1test.security;
+package com.example.nplus1test.domain.userLogin.security;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

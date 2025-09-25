@@ -1,4 +1,4 @@
-package com.example.nplus1test.security;
+package com.example.nplus1test.domain.userLogin.security;
 
 import com.example.nplus1test.token.TokenStore;
 import io.jsonwebtoken.Claims;

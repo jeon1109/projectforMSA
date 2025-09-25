@@ -1,10 +1,8 @@
-package com.example.nplus1test.consumer;
+package com.example.nplus1test.domain.rabbitMQ.consumer;
 
-import com.example.nplus1test.publisher.RabbitMQProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 @Service

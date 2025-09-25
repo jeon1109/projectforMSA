@@ -1,6 +1,6 @@
-package com.example.nplus1test.controller;
+package com.example.nplus1test.domain.rabbitMQ.controller;
 
-import com.example.nplus1test.publisher.RabbitMQProducer;
+import com.example.nplus1test.domain.rabbitMQ.publisher.RabbitMQProducer;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

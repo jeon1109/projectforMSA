@@ -1,4 +1,4 @@
-package com.example.nplus1test.controller;
+package com.example.nplus1test.domain.paymentService.controller;
 
 import com.example.nplus1test.config.TossProps;
 import com.example.nplus1test.domain.country.dto.ConfirmRequest;
