@@ -10,8 +10,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 public class AuthController {
     private final AuthService service;
+   // private final MemberService memberService;
 
-    public AuthController(AuthService service) { this.service = service; }
+    public AuthController(AuthService service) {
+        this.service = service;
+    }
 
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody @Valid UserDto.SignupRequest req) {
@@ -35,4 +38,23 @@ public class AuthController {
         service.logout(token);
         return ResponseEntity.ok().build();
     }
+
+//    @PostMapping("/signup")
+//    fun signup(@RequestBody @Valid request: SignUpRequest): ResponseEntity<String>
+//
+//        val encoder = BCryptPasswordEncoder()
+//        val encodedPassword = encoder.encode(request.password)
+//        println(encodedPassword)
+//
+//        memberService.register(
+//                username = request.username,
+//                password = encodedPassword,
+//                name = request.name,
+//                email = request.email,
+//                address = request.address,
+//                rrn = request.rrn
+//        )
+//
+//        return ResponseEntity.ok("회원가입 성공")
+//    }
 }

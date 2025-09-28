@@ -29,7 +29,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/signup/**", "/country", "/main/**", "/pay/**","/payView/test/", "/api/v1/", "/api/users/**", "/sse", "messages").permitAll()
+                        .requestMatchers("/auth/**", "/signup/**", "/country", "/main/**", "/pay/**","/pass/**", "/api/v1/", "/api/users/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .headers(h -> h.frameOptions(frame -> frame.disable())); // H2 콘솔용
