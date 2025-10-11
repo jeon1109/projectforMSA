@@ -21,9 +21,10 @@ public class PassService {
         if (!result.isSuccess()) {
             throw new IllegalStateException("PASS 처리 실패: " + result.getMessage());
         }
-
+        // encodeData를 클래스를 이용해서 사용
         Map<String, String> map = result.getData();
         String reqSeq = map.getOrDefault("REQ_SEQ", "");
+
         if (sessionReqSeq != null && !sessionReqSeq.equals(reqSeq)) {
             throw new IllegalStateException("세션값 불일치 오류입니다.");
         }

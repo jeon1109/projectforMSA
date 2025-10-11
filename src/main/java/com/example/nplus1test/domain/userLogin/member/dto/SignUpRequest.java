@@ -1,4 +1,4 @@
-package com.example.demo.dto;
+package com.example.nplus1test.domain.userLogin.member.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
