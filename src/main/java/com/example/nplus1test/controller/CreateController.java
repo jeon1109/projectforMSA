@@ -48,4 +48,11 @@ public class CreateController {
         return "redirect:/country";
     }
 
+    @GetMapping("/page")
+    public String testPage() {
+
+        return "test";
+    }
+
+
 }

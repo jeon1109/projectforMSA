@@ -1,6 +1,8 @@
 package com.example.nplus1test.config;
 
-import com.example.nplus1test.security.JwtAuthFilter;
+import com.example.nplus1test.domain.userLogin.Users.config.JwtAuthFilter;
+import com.example.nplus1test.domain.userLogin.Users.service.JwtService;
+import com.example.nplus1test.domain.userLogin.common.authority.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,29 +19,33 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private final JwtAuthFilter jwtAuthFilter;
+    private final JwtService jwtService;
 
-    public SecurityConfig(JwtAuthFilter jwtAuthFilter) {
-        this.jwtAuthFilter = jwtAuthFilter;
+    public SecurityConfig(JwtService jwtService) {
+        this.jwtService = jwtService;
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable())
-                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/signup/**", "/country", "/main/**").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .headers(h -> h.frameOptions(frame -> frame.disable())); // H2 콘솔용
-
-        http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        http.csrf(csrf -> csrf.disable());
+        http.sessionManagement(s -> s.sessionCreationPolicy(
+                SessionCreationPolicy.STATELESS
+        ));
+        http.authorizeHttpRequests(auth -> auth
+                .requestMatchers("/auth/**", "/signup/**", "/country", "/main/**", "/pay/**","/pass/**", "/v1/**", "/api/users/**")
+                .permitAll()
+                .anyRequest().authenticated()
+        );
+        http.headers(h -> h.frameOptions(f -> f.disable())); // H2 콘솔용
+        http.addFilterBefore(new JwtAuthFilter(jwtService), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
+
     @Bean
-    public PasswordEncoder passwordEncoder() { return new BCryptPasswordEncoder(); }
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
