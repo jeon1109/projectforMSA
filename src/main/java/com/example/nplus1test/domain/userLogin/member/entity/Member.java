@@ -29,6 +29,7 @@ public class Member {
     private String name;
 
     @Column(nullable = false)
+    @Temporal(TemporalType.DATE) // 날짜만 입력되게 설정
     private LocalDate birthDate;
 
     @Column(nullable = false, length = 5)

@@ -30,7 +30,7 @@
 </head>
 <body>
 <div class="wrap">
-    <form class="card" id="signupForm" novalidate>
+    <form class="card" id="signupForm" method="post" action="/auth/signup" novalidate>
         <h1>회원가입</h1>
         <p class="sub">이메일과 비밀번호를 입력해 주세요.</p>
 
@@ -56,43 +56,22 @@
             </div>
         </div>
 
-        <label for="phone">휴대폰번호</label>
-        <input id="phone" name="phone" type="phone" placeholder="010-1234-5678" autocomplete="phone" required />
-
-        <label>성별</label>
-        <div class="row-radio">
-            <label style="flex:1;display:flex;align-items:center;gap:6px;">
-                <input type="radio" name="gender" value="1" required /> 남성
-            </label>
-            <label style="flex:1;display:flex;align-items:center;gap:6px;">
-                <input type="radio" name="gender" value="2" /> 여성
-            </label>
-        </div>
-        <button type="button" class="btn" id="verifyBtn" type="submit" style="margin-top:10px;background:linear-gradient(180deg,var(--ok),#059669);">
-            본인인증
-        </button>
-
         <div class="err" id="errorBox"></div>
         <div class="ok" id="okBox"></div>
 
-        <div class="row" style="display: none" id="signupRow">
-            <button class="btn" id="submitBtn" type="submit">가입하기</button>
-            <p class="note">가입을 누르면 서비스 약관 및 개인정보 처리방침에 동의한 것으로 간주됩니다.</p>
-        </div>
+        <button class="btn" id="submitBtn" type="submit">가입하기</button>
+        <p class="note">가입을 누르면 서비스 약관 및 개인정보 처리방침에 동의한 것으로 간주.</p>
     </form>
 </div>
 
 <script>
     const form = document.getElementById('signupForm');
     const submitBtn = document.getElementById('submitBtn');
-    const verifyBtn = document.getElementById('verifyBtn');
-    const signupRow = document.getElementById('signupRow');
     const errorBox = document.getElementById('errorBox');
     const okBox = document.getElementById('okBox');
     const emailEl = document.getElementById('email');
     const pwEl = document.getElementById('password');
     const cfEl = document.getElementById('confirm');
-    const phoneEl = document.getElementById('phone');
     const strengthHint = document.getElementById('strengthHint');
 
     // 비밀번호 가시성 토글
@@ -113,6 +92,7 @@
         if(/[^A-Za-z0-9]/.test(pw)) score++;
         return score;
     }
+
     pwEl.addEventListener('input', ()=>{
         const s = strength(pwEl.value);
         const labels = ['매우 약함','약함','보통','좋음','아주 좋음'];
@@ -136,76 +116,83 @@
 
 
     // ✅ 본인인증 버튼 클릭 → /auth/phone-verify
-    verifyBtn.addEventListener('click', async ()=>{
-        const payload = {
-            email: emailEl.value.trim(),
-            password: pwEl.value,
-            phone: phoneEl.value.trim(),
-            gender: document.querySelector('[name="gender"]:checked')?.value || null
-        };
-
-        if(!/^01[016789]-?\d{3,4}-?\d{4}$/.test(payload.phone)){
-            errorBox.textContent = '올바른 휴대폰 번호를 입력해 주세요.';
-            return;
-        }
-
-        errorBox.textContent = ''; okBox.textContent = '';
-        verifyBtn.disabled = true;
-
-        try {
-            const res = await fetch('/pass/success', {
-                method:'POST',
-                headers:{'Content-Type':'application/json'},
-                body: JSON.stringify({ payload })
-            });
-
-            if(res.ok){
-                okBox.textContent = '본인인증 요청을 보냈습니다. 완료 후 가입하기 버튼이 활성화됩니다.';
-                // 성공 시 가입 버튼 표시
-                signupRow.style.display = 'block';
-            } else {
-                errorBox.textContent = '본인인증 중 오류가 발생했습니다.';
-            }
-        } catch(err){
-            errorBox.textContent = '네트워크 오류가 발생했습니다.';
-        } finally {
-            verifyBtn.disabled = false;
-        }
-    });
+    // verifyBtn.addEventListener('click', async ()=>{
+    //     const payload = {
+    //         email: emailEl.value.trim(),
+    //         password: pwEl.value,
+    //         gender: document.querySelector('[name="gender"]:checked')?.value || null
+    //     };
+    //
+    //     if(!/^01[016789]-?\d{3,4}-?\d{4}$/.test(payload.phone)){
+    //         errorBox.textContent = '올바른 휴대폰 번호를 입력해 주세요.';
+    //         return;
+    //     }
+    //
+    //     errorBox.textContent = ''; okBox.textContent = '';
+    //     verifyBtn.disabled = true;
+    //
+    //     try {
+    //         const res = await fetch('/pass/success', {
+    //             method:'POST',
+    //             headers:{'Content-Type':'application/json'},
+    //             body: JSON.stringify({ payload })
+    //         });
+    //
+    //         if(res.ok){
+    //             okBox.textContent = '본인인증 요청을 보냈습니다. 완료 후 가입하기 버튼이 활성화됩니다.';
+    //         } else {
+    //             errorBox.textContent = '본인인증 중 오류가 발생했습니다.';
+    //         }
+    //     } catch(err){
+    //         errorBox.textContent = '네트워크 오류가 발생했습니다.';
+    //     } finally {
+    //         verifyBtn.disabled = false;
+    //     }
+    // });
 
     // ✅ 가입하기 버튼 클릭 → /auth/signup
-    submitBtn.addEventListener('click', async ()=>{
-        const msg = validate(); // 기존 이메일/비밀번호 유효성 검사 함수
-        if(msg){ errorBox.textContent = msg; return; }
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
 
-        submitBtn.disabled = true; errorBox.textContent=''; okBox.textContent='';
+        // payload 만들기
+        const fd = new FormData(form);
+        const payload = Object.fromEntries(fd.entries()); // {name,email,password,confirm}
+
+        // 간단 검증
+        if (payload.password !== payload.confirm) {
+            errorBox.textContent = '비밀번호 확인이 일치하지 않습니다.'; return;
+        }
+
+        submitBtn.disabled = true; errorBox.textContent = ''; okBox.textContent = '';
 
         try{
-            const payload = {
-                email: emailEl.value.trim(),
-                password: pwEl.value,
-                phone: phoneEl.value.trim(),
-                gender: document.querySelector('[name="gender"]:checked')?.value || null
-            };
-
             const res = await fetch('/auth/signup', {
-                method:'POST',
-                headers:{ 'Content-Type':'application/json' },
-                body: JSON.stringify(payload)
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',     // ★ JSON 사용
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: payload.name,
+                    email: payload.email,
+                    password: payload.password
+                })
             });
 
-            if(res.status === 201 || res.ok){
-                okBox.textContent = '가입이 완료되었습니다. 로그인 페이지로 이동합니다.';
-                setTimeout(()=> location.href='/login', 800);
+            if (res.ok || res.status === 201) {
+                okBox.textContent = '가입이 완료되었습니다.';
+                setTimeout(() => location.href = '/login', 800);
             } else {
-                let errText;
-                try { errText = (await res.json()).message || (await res.text()); }
-                catch { errText = await res.text(); }
-                errorBox.textContent = errText || '가입 처리 중 오류가 발생했습니다.';
+                let msg = '';
+                try { msg = (await res.json()).message; } catch {}
+                if (!msg) { try { msg = await res.text(); } catch {} }
+                errorBox.textContent = msg || `가입 실패 (status ${res.status})`;
             }
-        }catch(err){
+
+        } catch (err) {
+            console.error(err);
             errorBox.textContent = '네트워크 오류가 발생했습니다.';
-        }finally{
+        } finally {
             submitBtn.disabled = false;
         }
     });
